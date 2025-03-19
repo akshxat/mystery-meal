@@ -16,15 +16,13 @@ const Hero = () => {
                 data-wow-delay=".2s"
               >
                 <h1 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-[1.2]">
-                  Welcome to Mystery Meal!
+                  Welcome to Mystery Meal
                 </h1>
-                <p className="mx-auto mb-9 max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
-                  Next.js SaaS Boilerplate and Starter Kit designed and built
-                  for SaaS startups. It comes with all necessary integrations,
-                  pages, and components you need to launch a feature-rich SaaS
-                  websites.
+                <p className="mx-auto max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
+                  Ready to start your next meal adventure? <br></br>
+                  Select your filters below an hit Go!
                 </p>
-                <ul className="mb-10 flex flex-wrap items-center justify-center gap-5">
+                {/* <ul className="mb-10 flex flex-wrap items-center justify-center gap-5">
                   <li>
                     <Link
                       href="https://nextjstemplates.com/templates/play"
@@ -59,9 +57,9 @@ const Hero = () => {
                       Star on Github
                     </Link>
                   </li>
-                </ul>
+                </ul> */}
 
-                <div>
+                {/* <div>
                   <p className="mb-4 text-center text-base font-medium text-white/60">
                     Play is now available for all popular frameworks
                   </p>
@@ -197,7 +195,7 @@ const Hero = () => {
                       </svg>
                     </Link>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -206,16 +204,23 @@ const Hero = () => {
                 className="wow fadeInUp relative z-10 mx-auto max-w-[845px]"
                 data-wow-delay=".25s"
               >
-                <div className="mt-16">
+                <div>
                   <Image
-                    src="/images/hero/hero-image.jpg"
+                    src={(function(){
+                      switch (Math.floor(Math.random() * 3)) {
+                        case 0: return "/images/hero/spaghetti.png";
+                        case 1: return "/images/hero/sushi.png";
+                        case 2: return "/images/hero/burger.png";
+                        default: return "/images/hero/spaghetti.png";
+                      }
+                    })()}
                     alt="hero"
                     className="mx-auto max-w-full rounded-t-xl rounded-tr-xl"
-                    width={845}
-                    height={316}
+                    width={300}
+                    height={300}
                   />
                 </div>
-                <div className="absolute -left-9 bottom-0 z-[-1]">
+                {/* <div className="absolute -left-9 bottom-0 z-[-1]">
                   <svg
                     width="134"
                     height="106"
@@ -1354,7 +1359,7 @@ const Hero = () => {
                       fill="white"
                     />
                   </svg>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
