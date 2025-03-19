@@ -80,5 +80,11 @@ const menuData: Menu[] = [
       },
     ],
   },
+  {
+    id: 7,
+    title: "NearBy",
+    path: "/nearbyPlaces",
+    newTab: false,
+  },
 ];
 export default menuData;
