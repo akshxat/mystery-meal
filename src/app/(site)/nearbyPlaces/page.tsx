@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 const NearbyPlaces = () => {
-  const location = { lat: 37.7749, lng: -122.4194 }; // Example coordinates (San Francisco)
+  const location = { lat: 37, lng: -122 }; // Example coordinates (San Francisco)
   const radius = 1500; // Radius in meters
   const type = 'restaurant'; // Optional: specify a place type
   
