@@ -4941,8 +4941,6 @@ snapshots:
 
   space-separated-tokens@2.0.2: {}
 
-  split-on-first@1.1.0: {}
-
   sparse-bitfield@3.0.3:
     dependencies:
       memory-pager: 1.5.0
