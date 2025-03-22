@@ -27,19 +27,19 @@ export default function Home() {
       <ScrollUp />
       <Hero />
       <Features />
-      <About />
-      <CallToAction />
+      {/* <About />
+      <CallToAction /> */}
       <Pricing />
-      <Testimonials />
+      {/* <Testimonials />
       <Faq />
       <Team />
       <HomeBlogSection posts={posts} />
       <Contact />
-      <Clients />
+      <Clients /> */
       <NearbyPlaces location={{
         lat: 0,
         lng: 0
-      }} radius={0} />
+      }} radius={0} />}
     </main>
   );
 }
