@@ -1,36 +1,3 @@
-// import { Client, PlacesNearbyRequest } from '@googlemaps/google-maps-services-js';
-
-// // Initialize the client
-// const client = new Client({});
-
-// // Function to get nearby places
-// export const getNearbyPlaces = async (
-//   location: { lat: number; lng: number },
-//   radius: number,
-//   type?: string
-// ) => {
-//   if (!process.env.GOOGLE_MAPS_API_KEY) {
-//     throw new Error('Missing Google Maps API Key');
-//   }
-
-//   try {
-//     const response = await client.placesNearby({
-//       params: {
-//         location,
-//         radius,
-//         type,
-//         key: process.env.GOOGLE_MAPS_API_KEY,
-//       },
-//       timeout: 3000, // Increased timeout to 3 seconds
-//     });
-
-//     return response.data.results; // Ensure this aligns with expected data structure
-//   } catch (error) {
-//     console.error('Error fetching nearby places:', error);
-//     throw error;
-//   }
-// };
-
 import { Client } from "@googlemaps/google-maps-services-js";
 
 // Initialize the client

@@ -63,7 +63,7 @@ const NearbyPlaces: React.FC<NearbyPlacesProps> = ({ location, radius, type }) =
         ))}
       </ul>
     ) : (
-      <p>No places found.</p> // ✅ Prevents errors if places is empty or not an array
+      <p>No places found.</p>
     )}
     </div>
   );
