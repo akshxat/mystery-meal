@@ -10,6 +10,7 @@ import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
+import NearbyPlaces from "@/components/NearbyPlaces";
 import { getAllPosts } from "@/utils/markdown";
 import { Metadata } from "next";
 import MysteryMeal from "@/components/MysteryMeal";
@@ -36,7 +37,12 @@ export default function Home() {
       <Team />
       <HomeBlogSection posts={posts} />
       <Contact />
-      <Clients /> */}
+      <Clients /> */
+      // <NearbyPlaces location={{
+      //   lat: 0,
+      //   lng: 0
+      // }} radius={0} />
+      }
     </main>
   );
 }
