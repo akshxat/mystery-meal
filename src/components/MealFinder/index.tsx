@@ -6,16 +6,13 @@ import { useFormStatus } from 'react-dom';
 export default function MealFinder() {
     const { pending, data } = useFormStatus();
     const [distanceValue, setDistanceValue] = useState(25);
-    const [priceValue, setPriceValue] = useState(50);
+    const [priceValue, setPriceValue] = useState(4);
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const formData = {
             distance: distanceValue,
             price: priceValue,
-            cuisine: Array.from(event.target.elements)
-                .filter((element: any) => (element as HTMLInputElement).type === 'checkbox' && (element as HTMLInputElement).checked)
-                .map(element => (element as HTMLInputElement).id.replace('cuisine-', ''))
         };
         console.log('Form Data:', formData);
     };
@@ -36,37 +33,52 @@ export default function MealFinder() {
                         className="w-full"
                     />
                     <br></br>
-                    <label htmlFor="price" className="mb-2 text-gray-700 font-semibold">Price: ${priceValue}/person</label>
-                    <input
-                        type="range"
-                        id="price"
-                        min="0"
-                        max="100"
-                        value={priceValue}
-                        onChange={(e) => setPriceValue(Number(e.target.value))}
-                        disabled={pending}
-                        className="w-full"
-                    />
-                    <div className="mt-4">
-                        <label htmlFor="cuisine" className="mb-2 text-gray-700 font-semibold">Cuisine:</label>
-                        <div className="flex space-x-4">
-                            <div className="flex items-center">
-                                <input type="checkbox" id="cuisine-italian" disabled={pending} className="h-4 w-4 bg-gray-300 rounded cursor-pointer accent-blue-600" />
-                                <label htmlFor="cuisine-italian" className="ml-1 text-gray-700">Italian</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input type="checkbox" id="cuisine-japanese" disabled={pending} className="h-4 w-4 bg-gray-300 rounded cursor-pointer accent-blue-600" />
-                                <label htmlFor="cuisine-japanese" className="ml-1 text-gray-700">Japanese</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input type="checkbox" id="cuisine-indian" disabled={pending} className="h-4 w-4 bg-gray-300 rounded cursor-pointer accent-blue-600" />
-                                <label htmlFor="cuisine-indian" className="ml-1 text-gray-700">Indian</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input type="checkbox" id="cuisine-mediterranean" disabled={pending} className="h-4 w-4 bg-gray-300 rounded cursor-pointer accent-blue-600" />
-                                <label htmlFor="cuisine-mediterranean" className="ml-1 text-gray-700">Mediterranean</label>
-                            </div>
-                        </div>
+                    <label htmlFor="price" className="mb-2 text-gray-700 font-semibold">Price:</label>
+                    <div className="flex space-x-2">
+                        <button
+                            type="button"
+                            onClick={() => setPriceValue(1)}
+                            disabled={pending}
+                            aria-pressed={priceValue === 1}
+                            className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
+                                priceValue === 1 ? 'bg-gray-200' : ''
+                            }`}
+                        >
+                            $
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setPriceValue(2)}
+                            disabled={pending}
+                            aria-pressed={priceValue === 2}
+                            className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
+                                priceValue === 2 ? 'bg-gray-200' : ''
+                            }`}
+                        >
+                            $$
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setPriceValue(3)}
+                            disabled={pending}
+                            aria-pressed={priceValue === 3}
+                            className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
+                                priceValue === 3 ? 'bg-gray-200' : ''
+                            }`}
+                        >
+                            $$$
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setPriceValue(4)}
+                            disabled={pending}
+                            aria-pressed={priceValue === 4}
+                            className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
+                                priceValue === 4 ? 'bg-gray-200' : ''
+                            }`}
+                        >
+                            $$$$
+                        </button>
                     </div>
                 </div>
                 <button
