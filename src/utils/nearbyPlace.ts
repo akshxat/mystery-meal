@@ -8,6 +8,7 @@ export const getNearbyPlaces = async (
   location: { lat: string; lng: string },
   radius: number,
   type?: string,
+  maxprice?: number,
 ) => {
   if (!process.env.GOOGLE_MAPS_API_KEY) {
     throw new Error("Missing Google Maps API Key");
@@ -20,6 +21,7 @@ export const getNearbyPlaces = async (
         radius: Math.max(1, Math.min(50000, radius)), // Ensure valid radius
         type: type || "restaurant", // Default type if missing
         key: process.env.GOOGLE_MAPS_API_KEY,
+        maxprice: maxprice, // Default max price if missing
       },
       timeout: 3000,
     });

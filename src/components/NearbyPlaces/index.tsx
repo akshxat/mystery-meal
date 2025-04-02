@@ -43,7 +43,7 @@ const NearbyPlaces: React.FC<NearbyPlacesProps> = ({ location, radius, type }) =
       }
     };
 
-    fetchPlaces();
+    // fetchPlaces();
 
     return () => {
       isMounted = false;

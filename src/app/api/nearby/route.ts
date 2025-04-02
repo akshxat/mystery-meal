@@ -8,25 +8,36 @@ export async function GET(req: Request) {
   const lng = searchParams.get("lng");
   const radius = searchParams.get("radius") || "1000";
   const type = searchParams.get("type") || "restaurant";
+  const maxprice = searchParams.get("maxprice");
 
   if (!lat || !lng) {
-    return NextResponse.json({ error: "Latitude and longitude are required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Latitude and longitude are required" },
+      { status: 400 },
+    );
   }
 
   try {
     const places = await getNearbyPlaces(
       { lat: lat, lng: lng },
       Number(radius),
-      type
+      type,
+      1,
     );
 
     if (!Array.isArray(places)) {
-      return NextResponse.json({ error: "Invalid data format" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Invalid data format" },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(places, { status: 200 });
   } catch (error) {
     console.error("API Error:", error);
-    return NextResponse.json({ error: "Failed to fetch places" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch places" },
+      { status: 500 },
+    );
   }
 }
