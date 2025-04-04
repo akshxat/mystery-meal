@@ -6,7 +6,7 @@ import { useFormStatus } from "react-dom";
 export default function MealFinder() {
     const { pending, data } = useFormStatus();
     const [distanceValue, setDistanceValue] = useState(25);
-    const [priceValue, setPriceValue] = useState();
+    const [priceValue, setPriceValue] = useState(0);
     const [places, setPlaces] = useState([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -55,14 +55,15 @@ export default function MealFinder() {
         console.log("Form Data:", formData);
 
         try {
+            const maxPriceParam = formData.price !== 0 ? `&maxprice=${formData.price}` : "";
             const response = await fetch(
-                `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}&maxprice=${formData.price}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+            `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}${maxPriceParam}`,
+            {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
                 },
+            },
             );
 
             if (!response.ok) throw new Error("Failed to fetch places");
@@ -119,7 +120,7 @@ export default function MealFinder() {
                         <input
                             type="range"
                             id="distance"
-                            min="0"
+                            min="1"
                             max="25"
                             value={distanceValue}
                             onChange={(e) => setDistanceValue(Number(e.target.value))}
@@ -129,6 +130,16 @@ export default function MealFinder() {
                         <br></br>
                         <label htmlFor="price" className="mb-2 text-gray-700 font-semibold">Price:</label>
                         <div className="flex space-x-2">
+                            <button
+                                type="button"
+                                onClick={() => setPriceValue(0)}
+                                disabled={pending}
+                                aria-pressed={priceValue === 0}
+                                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${priceValue === 0 ? 'bg-gray-200' : ''
+                                    }`}
+                            >
+                                Any
+                            </button>
                             <button
                                 type="button"
                                 onClick={() => setPriceValue(1)}
