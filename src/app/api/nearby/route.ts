@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
-  const radius = searchParams.get("radius") || "1000";
-  const type = searchParams.get("type") || "restaurant";
-  const maxprice = searchParams.get("maxprice");
+  const _lat = searchParams.get("lat");
+  const _lng = searchParams.get("lng");
+  const _radius = searchParams.get("radius") || "1000";
+  const _type = searchParams.get("type") || "restaurant";
+  const _maxPrice = searchParams.get("maxprice") || 0;
 
-  if (!lat || !lng) {
+  if (!_lat || !_lng) {
     return NextResponse.json(
       { error: "Latitude and longitude are required" },
       { status: 400 },
@@ -19,10 +19,10 @@ export async function GET(req: Request) {
 
   try {
     const places = await getNearbyPlaces(
-      { lat: lat, lng: lng },
-      Number(radius),
-      type,
-      1,
+      { lat: _lat, lng: _lng },
+      Number(_radius),
+      _type,
+      Number(_maxPrice),
     );
 
     if (!Array.isArray(places)) {

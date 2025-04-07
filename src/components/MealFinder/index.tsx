@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { fetchResponse } from "../../utils/aiWebSearch";
 
 export default function MealFinder() {
   const { pending, data } = useFormStatus();
@@ -14,7 +15,7 @@ export default function MealFinder() {
     null,
   );
   const isMounted = useRef(true);
-  const homeLocation = {lat: 44.669591, lng: -63.613833};
+  const homeLocation = { lat: 44.669591, lng: -63.613833 };
 
   useEffect(() => {
     isMounted.current = true;
@@ -64,7 +65,7 @@ export default function MealFinder() {
     console.log("Form Data:", formData);
 
     try {
-      const response = await fetch(
+      const nearbyResponse = await fetch(
         `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}&maxprice=${formData.price}`,
         {
           method: "GET",
@@ -74,29 +75,52 @@ export default function MealFinder() {
         },
       );
 
-      if (!response.ok) throw new Error("Failed to fetch places");
+      if (!nearbyResponse.ok) throw new Error("Failed to fetch places");
 
-      const data = await response.json();
-      console.log("Data:", data);
+      const nearbyResponseData = await nearbyResponse.json();
+      
+      const transformedData = nearbyResponseData?.map((place: any) => ({
+        name: place.name,
+        // place_id: place.place_id,
+        location: place.geometry.location,
+      }));
+
+      var nextAuth = true;
+      if (nextAuth) {
+        const webResponse = await fetch(
+          `/api/ai-web-search`,
+          {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ search: "Hello There!" }),
+          },
+        );
+      
+        console.log("webData:", await webResponse.json());
+      }
+
+      
 
       if (isMounted.current) {
-        setPlaces(data);
+        setPlaces(nearbyResponseData);
 
-        const randomPlace = data[Math.floor(Math.random() * data.length)];
+        const randomPlace = nearbyResponseData[Math.floor(Math.random() * nearbyResponseData.length)];
 
         if (randomPlace) {
           // Construct the Google Maps URL
           // const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${randomPlace.geometry.location.lat},${randomPlace.geometry.location.lng}`;
-          var xray1 = randomPlace.plus_code.compound_code.replace("+", "%2B"); 
-          console.log("🚀 ~ handleSubmit ~ xray1:", xray1)
-          var xray = xray1.replace(/\s+/g, ""); 
-          console.log("🚀 ~ handleSubmit ~ xray:", xray)
-          console.log("🚀 ~ handleSubmit ~ randomPlace.plus_code.compound_code:", randomPlace.plus_code.compound_code)
+          var xray1 = randomPlace.plus_code.compound_code.replace("+", "%2B");
+          // console.log("🚀 ~ handleSubmit ~ xray1:", xray1)
+          var xray = xray1.replace(/\s+/g, "");
+          // console.log("🚀 ~ handleSubmit ~ xray:", xray)
+          // console.log("🚀 ~ handleSubmit ~ randomPlace.plus_code.compound_code:", randomPlace.plus_code.compound_code)
           const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${xray}`;
 
-          console.log("🚀 ~ handleSubmit ~ googleMapsUrl:", googleMapsUrl)
+          // console.log("🚀 ~ handleSubmit ~ googleMapsUrl:", googleMapsUrl)
           // Open the URL in a new tab
-          window.open(googleMapsUrl, "_blank");
+          // window.open(googleMapsUrl, "_blank");
         }
       }
     } catch (err) {
