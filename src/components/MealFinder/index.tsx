@@ -76,7 +76,8 @@ export default function MealFinder() {
         location: place.geometry.location,
       }));
 
-      var nextAuth = true;
+      var nextAuth = false;
+
       if (nextAuth) {
         const webResponse = await fetch(
           `/api/ai-web-search`,
@@ -111,7 +112,7 @@ export default function MealFinder() {
 
           // console.log("🚀 ~ handleSubmit ~ googleMapsUrl:", googleMapsUrl)
           // Open the URL in a new tab
-          // window.open(googleMapsUrl, "_blank");
+          window.open(googleMapsUrl, "_blank");
         }
       }
     } catch (err) {

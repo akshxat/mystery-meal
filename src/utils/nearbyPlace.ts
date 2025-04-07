@@ -16,6 +16,7 @@ export const getNearbyPlaces = async (
 
   try {
     console.log("key", process.env.GOOGLE_MAPS_API_KEY);
+    
     const params: any = {
       location: `${_location.lat},${_location.lng}`, 
       radius: Math.max(1, Math.min(50000, _radius)), 
