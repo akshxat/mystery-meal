@@ -2,23 +2,38 @@ import axios from "axios";
 import React from "react";
 import OfferList from "./OfferList";
 import { Price } from "@/types/price";
+import { useSession } from "next-auth/react";
 
 const PricingBox = ({ product }: { product: Price }) => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id; // Assuming the session includes the user ID
+
   // POST request
   const handleSubscription = async (e: any) => {
     e.preventDefault();
-    const { data } = await axios.post(
-      "/api/payment",
-      {
-        priceId: product.id,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+
+    try {
+      const { data } = await axios.post(
+        "/api/payment",
+        {
+          priceId: product.id,
+          userId: session?.user?.id, // Pass the user ID from the session
         },
-      },
-    );
-    window.location.assign(data);
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (data.url) {
+        window.location.assign(data.url); // Redirect to Stripe checkout
+      } else {
+        throw new Error("Missing redirect URL from Stripe");
+      }
+    } catch (error) {
+      console.error("Error during subscription:", error);
+    }
   };
 
   return (
