@@ -5,28 +5,35 @@ const client = new Client({});
 
 // Function to get nearby places
 export const getNearbyPlaces = async (
-  location: { lat: string; lng: string },
-  radius: number,
-  type?: string,
-  maxprice?: number,
+  _location: { lat: string; lng: string },
+  _radius: number,
+  _type?: string,
+  _maxPrice?: number,
 ) => {
   if (!process.env.GOOGLE_MAPS_API_KEY) {
     throw new Error("Missing Google Maps API Key");
   }
 
   try {
+    console.log("key", process.env.GOOGLE_MAPS_API_KEY);
+    
+    const params: any = {
+      location: `${_location.lat},${_location.lng}`, 
+      radius: Math.max(1, Math.min(50000, _radius)), 
+      type: _type || "restaurant", 
+      key: process.env.GOOGLE_MAPS_API_KEY,
+    };
+
+    if (_maxPrice && _maxPrice > 0) {
+      params.maxprice = _maxPrice;
+    }
+
     const response = await client.placesNearby({
-      params: {
-        location: `${location.lat},${location.lng}`, // Convert to "lat,lng"
-        radius: Math.max(1, Math.min(50000, radius)), // Ensure valid radius
-        type: type || "restaurant", // Default type if missing
-        key: process.env.GOOGLE_MAPS_API_KEY,
-        maxprice: maxprice, // Default max price if missing
-      },
+      params,
       timeout: 3000,
     });
 
-    return response.data.results; // Return only results
+    return response.data.results;
   } catch (error: any) {
     console.error(
       "Google Places API Error:",

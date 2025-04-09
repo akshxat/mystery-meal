@@ -2,19 +2,20 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { fetchResponse } from "../../utils/aiWebSearch";
 
 export default function MealFinder() {
-    const { pending, data } = useFormStatus();
-    const [distanceValue, setDistanceValue] = useState(25);
-    const [priceValue, setPriceValue] = useState(0);
-    const [places, setPlaces] = useState([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-        null,
-    );
-    const isMounted = useRef(true);
-    const homeLocation = { lat: 44.669591, lng: -63.613833 };
+  const { pending, data } = useFormStatus();
+  const [distanceValue, setDistanceValue] = useState(25);
+  const [priceValue, setPriceValue] = useState(50);
+  const [places, setPlaces] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
+  const isMounted = useRef(true);
+  const homeLocation = { lat: 44.669591, lng: -63.613833 };
 
     useEffect(() => {
         isMounted.current = true;
@@ -54,54 +55,77 @@ export default function MealFinder() {
         };
         console.log("Form Data:", formData);
 
-        try {
-            const maxPriceParam = formData.price !== 0 ? `&maxprice=${formData.price}` : "";
-            const response = await fetch(
-            `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}${maxPriceParam}`,
-            {
-                method: "GET",
-                headers: {
-                "Content-Type": "application/json",
-                },
+    try {
+      const nearbyResponse = await fetch(
+        `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}&maxprice=${formData.price}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!nearbyResponse.ok) throw new Error("Failed to fetch places");
+
+      const nearbyResponseData = await nearbyResponse.json();
+      
+      const transformedData = nearbyResponseData?.map((place: any) => ({
+        name: place.name,
+        // place_id: place.place_id,
+        location: place.geometry.location,
+      }));
+
+      var nextAuth = false;
+
+      if (nextAuth) {
+        const webResponse = await fetch(
+          `/api/ai-web-search`,
+          {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
             },
-            );
+            body: JSON.stringify({ search: "Hello There!" }),
+          },
+        );
+      
+        console.log("webData:", await webResponse.json());
+      }
 
-            if (!response.ok) throw new Error("Failed to fetch places");
+      
 
-            const data = await response.json();
-            console.log("Data:", data);
+      if (isMounted.current) {
+        setPlaces(nearbyResponseData);
 
-            if (isMounted.current) {
-                setPlaces(data);
+        const randomPlace = nearbyResponseData[Math.floor(Math.random() * nearbyResponseData.length)];
 
-                const randomPlace = data[Math.floor(Math.random() * data.length)];
+        if (randomPlace) {
+          // Construct the Google Maps URL
+          // const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${randomPlace.geometry.location.lat},${randomPlace.geometry.location.lng}`;
+          var xray1 = randomPlace.plus_code.compound_code.replace("+", "%2B");
+          // console.log("🚀 ~ handleSubmit ~ xray1:", xray1)
+          var xray = xray1.replace(/\s+/g, "");
+          // console.log("🚀 ~ handleSubmit ~ xray:", xray)
+          // console.log("🚀 ~ handleSubmit ~ randomPlace.plus_code.compound_code:", randomPlace.plus_code.compound_code)
+          const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${xray}`;
 
-                if (randomPlace) {
-                    // Construct the Google Maps URL
-                    // const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${randomPlace.geometry.location.lat},${randomPlace.geometry.location.lng}`;
-                    var xray1 = randomPlace.plus_code.compound_code.replace("+", "%2B");
-                    console.log("🚀 ~ handleSubmit ~ xray1:", xray1)
-                    var xray = xray1.replace(/\s+/g, "");
-                    console.log("🚀 ~ handleSubmit ~ xray:", xray)
-                    console.log("🚀 ~ handleSubmit ~ randomPlace.plus_code.compound_code:", randomPlace.plus_code.compound_code)
-                    const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${xray}`;
-
-                    console.log("🚀 ~ handleSubmit ~ googleMapsUrl:", googleMapsUrl)
-                    // Open the URL in a new tab
-                    window.open(googleMapsUrl, "_blank");
-                }
-            }
-        } catch (err) {
-            console.error("Error fetching places:", err);
-            if (isMounted.current) {
-                setError(err instanceof Error ? err.message : "Failed to load places");
-            }
-        } finally {
-            if (isMounted.current) {
-                setLoading(false);
-            }
+          // console.log("🚀 ~ handleSubmit ~ googleMapsUrl:", googleMapsUrl)
+          // Open the URL in a new tab
+          window.open(googleMapsUrl, "_blank");
         }
-    };
+      }
+    } catch (err) {
+      console.error("Error fetching places:", err);
+      if (isMounted.current) {
+        setError(err instanceof Error ? err.message : "Failed to load places");
+      }
+    } finally {
+      if (isMounted.current) {
+        setLoading(false);
+      }
+    }
+  };
 
     return (
         <>
