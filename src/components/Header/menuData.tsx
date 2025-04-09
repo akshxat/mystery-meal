@@ -31,12 +31,12 @@ const menuData: Menu[] = [
     path: "/nearbyPlaces",
     newTab: false,
   },
-  // {
-  //   id: 5,
-  //   title: "Blog",
-  //   path: "/blogs",
-  //   newTab: false,
-  // },
+  {
+    id: 5,
+    title: "Admin",
+    path: "/adminDashboard",
+    newTab: false,
+  },
   // {
   //   id: 6,
   //   title: "Pages",
