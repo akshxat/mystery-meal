@@ -16,7 +16,6 @@ export default function MealFinder() {
   );
   const isMounted = useRef(true);
   const homeLocation = { lat: 44.669591, lng: -63.613833 };
-  const [aiResponse, setResponse] = useState("");
 
     useEffect(() => {
         isMounted.current = true;
@@ -46,28 +45,6 @@ export default function MealFinder() {
             isMounted.current = false;
         };
     }, []);
-
-    const handlePostRequest = async () => {
-      try {
-        const res = await fetch("/api/example", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: "Hello from the frontend!" }),
-        });
-  
-        if (!res.ok) {
-          throw new Error("Failed to send POST request");
-        }
-  
-        const data = await res.json();
-        setResponse(data.result);
-      } catch (error) {
-        console.error("Error:", error);
-        setResponse("Error occurred");
-      }
-    }
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -99,7 +76,7 @@ export default function MealFinder() {
         location: place.geometry.location,
       }));
 
-      var nextAuth = true;
+      var nextAuth = false;
 
       if (nextAuth) {
         const webResponse = await fetch(
