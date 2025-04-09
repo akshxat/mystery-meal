@@ -11,11 +11,6 @@ export async function fetchResponse(searchData: string) {
       throw new Error("OPENAI_API_KEY is not set or is empty.");
     }
 
-    // const response = await client.responses.create({
-    //   model: "gpt-4o-mini-search-preview",
-    //   input: searchData,
-    // });
-
     var searchDataSample = [
       "The Bicycle Thief",
       "Café Lunette",
@@ -39,7 +34,7 @@ export async function fetchResponse(searchData: string) {
       "The Old Triangle Irish Alehouse"
   ];
 
-  var userInputPrompt = "pasta made with wine";
+  var userInputPrompt = searchData;
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini-search-preview",
@@ -74,7 +69,7 @@ export async function fetchResponse(searchData: string) {
     
   });
 
-    return await completion; // Return the text of the first choice
+    return await completion.choices[0].message.content; // Return the text of the first choice
     // return await response; // Return the text of the first choice
   } catch (error) {
     console.error("Error in fetchResponse:", error);
