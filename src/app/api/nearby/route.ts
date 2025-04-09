@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   const lng = searchParams.get("lng");
   const radius = searchParams.get("radius") || "1000";
   const type = searchParams.get("type") || "restaurant";
-  const maxprice = searchParams.get("maxprice");
+  const maxprice = searchParams.get("maxprice") || 0;
 
   if (!lat || !lng) {
     return NextResponse.json(
@@ -22,7 +22,7 @@ export async function GET(req: Request) {
       { lat: lat, lng: lng },
       Number(radius),
       type,
-      1,
+      Number(maxprice),
     );
 
     if (!Array.isArray(places)) {
