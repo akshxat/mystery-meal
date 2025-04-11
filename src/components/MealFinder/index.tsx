@@ -87,25 +87,22 @@ export default function MealFinder() {
 
       const nearbyResponseData = await nearbyResponse.json();
 
-      const transformedData = nearbyResponseData?.map((place: any) => ({
+      const transformedRestaurantsData = nearbyResponseData?.map((place: any) => ({
         name: place.name,
         // place_id: place.place_id,
         location: place.geometry.location,
       }));
 
-      var nextAuth = false;
-
-      if (nextAuth) {
-        const webResponse = await fetch(
-          `/api/ai-web-search`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ search: "Hello There!" }),
+      const isPremium = session?.user != null ? session?.user?.isPremium : false;
+      
+      if (isPremium) {
+        const webResponse = await fetch(`/api/ai-web-search`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({ restaurantsData: transformedRestaurantsData, searchData: "I liked butter chicken, anything similar to it" }),
+        });
 
         console.log("webData:", await webResponse.json());
       }
@@ -113,7 +110,10 @@ export default function MealFinder() {
       if (isMounted.current) {
         setPlaces(nearbyResponseData);
 
-        const randomPlace = nearbyResponseData[Math.floor(Math.random() * nearbyResponseData.length)];
+        const randomPlace =
+          nearbyResponseData[
+            Math.floor(Math.random() * nearbyResponseData.length)
+          ];
 
         if (randomPlace) {
           // Construct the Google Maps URL

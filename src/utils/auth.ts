@@ -95,6 +95,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: user.id,
+          isPremium: user.isPremium,
         };
       }
       return token;
@@ -107,6 +108,7 @@ export const authOptions: NextAuthOptions = {
           user: {
             ...session.user,
             id: token?.id,
+            isPremium: token?.isPremium,
           },
         };
       }
