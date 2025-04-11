@@ -15,9 +15,18 @@ export default function MealFinder() {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
     null,
   );
+  const [mysteryFilter, setMysteryFilter] = useState("");
   const isMounted = useRef(true);
   const homeLocation = { lat: 44.669591, lng: -63.613833 };
   const { data: session } = useSession();
+
+  const sessionId = session?.user?.id;
+  console.log("Session ID:", sessionId);
+  console.log("Premium:", session?.user);
+
+  const isPremiumUser = () => {
+    return session?.user?.isPremium ? true : false;
+  };
 
   useEffect(() => {
     isMounted.current = true;
@@ -33,7 +42,7 @@ export default function MealFinder() {
           });
         },
         (error) => {
-          console.error("Error getting location:", error);
+          // console.error("Error getting location:", error);
           if (isMounted.current) {
             setError("Failed to get location");
           }
@@ -74,7 +83,6 @@ export default function MealFinder() {
 
       const transformedRestaurantsData = nearbyResponseData?.map((place: any) => ({
         name: place.name,
-        // place_id: place.place_id,
         location: place.geometry.location,
       }));
 
@@ -88,23 +96,20 @@ export default function MealFinder() {
           },
           body: JSON.stringify({ restaurantsData: transformedRestaurantsData, searchData: "I liked butter chicken, anything similar to it" }),
         });
-
         console.log("webData:", await webResponse.json());
       }
 
       if (isMounted.current) {
         setPlaces(nearbyResponseData);
 
-        const randomPlace =
-          nearbyResponseData[
-            Math.floor(Math.random() * nearbyResponseData.length)
-          ];
+        const randomPlace = nearbyResponseData[
+          Math.floor(Math.random() * nearbyResponseData.length)
+        ];
 
         if (randomPlace) {
           // Construct the Google Maps URL
           // const googleMapsUrl = `https://www.google.com/maps/dir/${homeLocation.lat},${homeLocation.lng}/${randomPlace.geometry.location.lat},${randomPlace.geometry.location.lng}`;
           var xray1 = randomPlace.plus_code.compound_code.replace("+", "%2B");
-          // console.log("🚀 ~ handleSubmit ~ xray1:", xray1)
           var xray = xray1.replace(/\s+/g, "");
           // console.log("🚀 ~ handleSubmit ~ xray:", xray)
           // console.log("🚀 ~ handleSubmit ~ randomPlace.plus_code.compound_code:", randomPlace.plus_code.compound_code)
@@ -127,18 +132,53 @@ export default function MealFinder() {
     }
   };
 
+  // Conditional form styling based on location availability
+  const formClassName = !location
+    ? "flex flex-col space-y-6 rounded-md bg-red-100 p-6 shadow-md border-2 border-red-500"
+    : "flex flex-col space-y-6 rounded-md bg-gray-50 p-6 shadow-md";
+
   return (
     <>
       <div className="mx-auto mt-12 max-w-2xl">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col space-y-6 rounded-md bg-gray-50 p-6 shadow-md"
-        >
+        <form onSubmit={handleSubmit} className={formClassName}>
           <div className="flex flex-col">
-            <label
-              htmlFor="distance"
-              className="mb-2 font-semibold text-gray-700"
-            >
+            {/* <label htmlFor="Session ID" className="mb-2 font-semibold text-gray-700">
+              Session ID: (Testing Only)
+            </label>
+            <input
+              type="text"
+              id="Session ID"
+              value={sessionId ? sessionId : "No user signed in"}
+              readOnly
+              className="rounded border-gray-300 p-2 disabled:opacity-50"
+              disabled={pending}
+            />
+            <br />
+            <label htmlFor="Session ID" className="mb-2 font-semibold text-gray-700">
+              Premium User: (Testing Only)
+            </label>
+            <input
+              type="text"
+              id="Premium User"
+              value={isPremiumUser() ? "Yes" : "No"}
+              readOnly
+              className="rounded border-gray-300 p-2 disabled:opacity-50"
+              disabled={pending}
+            />
+            <br /> */}
+            <label htmlFor="location" className="mb-2 font-semibold text-gray-700">
+              Location:
+            </label>
+            <input
+              type="text"
+              id="location"
+              value={location ? `${location.lat}, ${location.lng} ✅` : "Please allow location access ❌"}
+              readOnly
+              className="rounded border-gray-300 p-2 disabled:opacity-50"
+              disabled={pending}
+            />
+            <br />
+            <label htmlFor="distance" className="mb-2 font-semibold text-gray-700">
               Distance: {distanceValue} Kilometers
             </label>
             <input
@@ -151,8 +191,24 @@ export default function MealFinder() {
               disabled={pending}
               className="w-full"
             />
-            <br></br>
-            <label htmlFor="price" className="mb-2 font-semibold text-gray-700">
+            <br />
+            <label htmlFor="MysteryPlus+ Filter" className="mb-2 text-gray-700 font-semibold">
+              ✨MysteryPlus+🔮 AI Filter✨:
+            </label>
+            <input
+              type="text"
+              id="MysteryPlus+ Filter"
+              value={
+                isPremiumUser()
+                  ? mysteryFilter
+                  : "Subscribe to MysteryPlus+ to use custom AI powered filters!"
+              }
+              onChange={(e) => isPremiumUser() && setMysteryFilter(e.target.value)}
+              className="rounded border-gray-300 p-2"
+              disabled={!isPremiumUser()}
+            />
+            <br />
+            <label htmlFor="price" className="mb-2 text-gray-700 font-semibold">
               Price:
             </label>
             <div className="flex space-x-2">
@@ -161,7 +217,7 @@ export default function MealFinder() {
                 onClick={() => setPriceValue(0)}
                 disabled={pending}
                 aria-pressed={priceValue === 0}
-                className={`rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 ${
+                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
                   priceValue === 0 ? "bg-gray-200" : ""
                 }`}
               >
@@ -172,7 +228,7 @@ export default function MealFinder() {
                 onClick={() => setPriceValue(1)}
                 disabled={pending}
                 aria-pressed={priceValue === 1}
-                className={`rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 ${
+                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
                   priceValue === 1 ? "bg-gray-200" : ""
                 }`}
               >
@@ -183,7 +239,7 @@ export default function MealFinder() {
                 onClick={() => setPriceValue(2)}
                 disabled={pending}
                 aria-pressed={priceValue === 2}
-                className={`rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 ${
+                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
                   priceValue === 2 ? "bg-gray-200" : ""
                 }`}
               >
@@ -194,7 +250,7 @@ export default function MealFinder() {
                 onClick={() => setPriceValue(3)}
                 disabled={pending}
                 aria-pressed={priceValue === 3}
-                className={`rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 ${
+                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
                   priceValue === 3 ? "bg-gray-200" : ""
                 }`}
               >
@@ -205,7 +261,7 @@ export default function MealFinder() {
                 onClick={() => setPriceValue(4)}
                 disabled={pending}
                 aria-pressed={priceValue === 4}
-                className={`rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 ${
+                className={`px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${
                   priceValue === 4 ? "bg-gray-200" : ""
                 }`}
               >
@@ -215,7 +271,7 @@ export default function MealFinder() {
           </div>
           <button
             type="submit"
-            disabled={pending}
+            disabled={!location}
             className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
           >
             Go!
