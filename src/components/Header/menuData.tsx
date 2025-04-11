@@ -19,24 +19,24 @@ const menuData: Menu[] = [
     path: "/pricing",
     newTab: false,
   },
-  {
-    id: 5,
-    title: "Support",
-    path: "/contact",
-    newTab: false,
-  },
+  // {
+  //   id: 5,
+  //   title: "Support",
+  //   path: "/contact",
+  //   newTab: false,
+  // },
   // {
   //   id: 6,
   //   title: "NearBy",
   //   path: "/nearbyPlaces",
   //   newTab: false,
   // },
-  // {
-  //   id: 5,
-  //   title: "Admin Dashboard",
-  //   path: "/dashboard",
-  //   newTab: false,
-  // },
+  {
+    id: 5,
+    title: "Admin Dashboard",
+    path: "/dashboard",
+    newTab: false,
+  },
   // {
   //   id: 6,
   //   title: "Pages",
