@@ -12,14 +12,7 @@ const NavMenu = () => {
 
   console.log('Session: nav', session);
 
-  if (session?.user?.isAdmin) {
-    menuItems.push({
-      id: 99,
-      title: 'Admin Dashboard',
-      path: '/dashboard',
-      newTab: false,
-    });
-  }
+  
 
   return (
     <ul className="flex items-center gap-6">
