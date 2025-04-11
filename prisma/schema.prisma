@@ -46,6 +46,7 @@ model User {
   passwordResetToken    String?   @unique
   passwordResetTokenExp DateTime?
   isPremium             Boolean?
+  isAdmin               Boolean?  @default(false)
 
   accounts              Account[]
   sessions              Session[]

@@ -68,7 +68,7 @@ export default function MealFinder() {
 
     try {
       const nearbyResponse = await fetch(
-        `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=${"restaurant"}&maxprice=${formData.price}`,
+        `/api/nearby?lat=${homeLocation.lat}&lng=${homeLocation.lng}&radius=${formData.distance * 1000}&type=restaurant&maxprice=${formData.price}`,
         {
           method: "GET",
           headers: {
