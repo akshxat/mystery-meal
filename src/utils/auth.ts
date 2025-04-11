@@ -87,33 +87,31 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    jwt: async (payload: any) => {
-      const { token } = payload;
-      const user = payload.user;
-
+    jwt: async ({ token, user }) => {
+      // First time login: add user data to token
       if (user) {
-        return {
-          ...token,
-          id: user.id,
-          isPremium: user.isPremium,
-        };
+        const userInDB = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+  
+        token.id = user.id;
+        token.isPremium = userInDB?.isPremium;
+        token.isAdmin = userInDB?.isAdmin; 
       }
+  
       return token;
     },
+  
 
     session: async ({ session, token }) => {
       if (session?.user) {
-        return {
-          ...session,
-          user: {
-            ...session.user,
-            id: token?.id,
-            isPremium: token?.isPremium,
-          },
-        };
+        session.user.id = token.id as string;
+        session.user.isPremium = token.isPremium as boolean;
+        session.user.isAdmin = token.isAdmin as boolean;
       }
+  
       return session;
-    },
+    },  
   },
 
   // debug: process.env.NODE_ENV === "developement",
