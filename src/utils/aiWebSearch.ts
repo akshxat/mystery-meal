@@ -1,7 +1,7 @@
 import "dotenv/config";
 import OpenAI from "openai";
 
-export async function fetchResponse(searchData: string) {
+export async function fetchResponse(restaurantsData, userInputPrompt) {
   try {
     const client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -39,8 +39,6 @@ export async function fetchResponse(searchData: string) {
       "The Old Triangle Irish Alehouse"
   ];
 
-  var userInputPrompt = "pasta made with wine";
-
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini-search-preview",
       web_search_options: {},
@@ -52,8 +50,7 @@ export async function fetchResponse(searchData: string) {
               "type": "text",
               "text": `
                 Please provide information exclusively related to food specific to the given location.
-                Here is the list json object of restaurants and use this as search context: 
-                ${searchDataSample}.
+                Here is the list of restaurants and use this as search context: ${restaurantsData}.
                 Here is the user prompt: ${userInputPrompt},
                 if the prompt is not related to food, or the provided search context then please respond with "please try again".
                 otherwise, respond with the name of a restaurant from the search context.

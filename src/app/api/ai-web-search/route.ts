@@ -2,21 +2,27 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { fetchResponse } from "../../../utils/aiWebSearch";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const searchInput = searchParams.get("search")?.toString();
-
+export async function POST(req: Request) {
   try {
-    const searchOutput = await fetchResponse(searchInput || "");
-    console.log("🚀 ~ GET ~ searchOutput:", searchOutput)
+    // Parse the JSON body from the request
+    const body = await req.json();
+    const { restaurantsData, searchData } = body;
 
-    return NextResponse.json(searchOutput, { status: 200 });
+    if (!searchData || typeof searchData !== "string") {
+      return NextResponse.json({ error: "Invalid or missing 'search' parameter" }, { status: 400 });
+    }
+
+    // Call the fetchResponse function with the search input
+    const searchOutput = await fetchResponse(restaurantsData, searchData);
+    console.log("🚀 ~ POST ~ searchOutput:", searchOutput);
+
+    return NextResponse.json({ result: searchOutput }, { status: 200 });
   } catch (error) {
     console.error("API Error:", error);
 
-    return new NextResponse(
-      error instanceof Error ? error.message : "Failed to fetch places",
-      { status: 500 },
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Failed to process request" },
+      { status: 500 }
     );
   }
 }
