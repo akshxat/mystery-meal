@@ -29,14 +29,21 @@ const SignUp = () => {
       },
       body: JSON.stringify(finalData),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then(err => {
+            throw new Error(err.message || 'Registration failed');
+          });
+        }
+        return res.json();
+      })
       .then((data) => {
         toast.success("Successfully registered");
         setLoading(false);
         router.push("/signin");
       })
       .catch((err) => {
-        toast.error(err.message);
+        toast.error(err.message || "Failed to register. Please try again.");
         setLoading(false);
       });
   };
