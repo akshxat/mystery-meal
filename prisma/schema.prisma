@@ -43,7 +43,7 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
-  passwordResetToken    String?   @unique
+  passwordResetToken    String?
   passwordResetTokenExp DateTime?
   isPremium             Boolean?
   isAdmin               Boolean?  @default(false)
