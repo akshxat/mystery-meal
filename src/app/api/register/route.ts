@@ -11,29 +11,61 @@ export async function POST(request: any) {
       return NextResponse.json({ message: "Missing Fields" }, { status: 400 });
     }
 
-    const exist = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: {
         email: email.toLowerCase(),
       },
     });
 
-    if (exist) {
+    if (existingUser) {
       return NextResponse.json({ message: "User already exists!" }, { status: 409 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         name,
         email: email.toLowerCase(),
         password: hashedPassword,
+        isAdmin: false,
+        isPremium: false,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isAdmin: true,
+        isPremium: true,
       },
     });
 
-    return NextResponse.json({ message: "User created successfully!" }, { status: 200 });
-  } catch (err) {
-    console.error("Error during user registration:", err);
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { 
+        message: "User created successfully!",
+        user: newUser
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Registration error:", error.message);
+      return NextResponse.json(
+        { 
+          message: "Registration failed",
+          error: error.message
+        },
+        { status: 500 }
+      );
+    } else {
+      console.error("Unknown registration error occurred");
+      return NextResponse.json(
+        { 
+          message: "Registration failed",
+          error: "An unknown error occurred"
+        },
+        { status: 500 }
+      );
+    }
   }
 }
