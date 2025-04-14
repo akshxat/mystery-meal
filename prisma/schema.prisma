@@ -59,4 +59,11 @@ model VerificationToken {
   expires    DateTime
 }
 
+model Location {
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  city String
+  lat  Float
+  lng  Float
+}
+
 
