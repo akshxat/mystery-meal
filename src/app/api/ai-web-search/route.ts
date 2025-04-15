@@ -6,15 +6,20 @@ export async function POST(req: Request) {
   try {
     // Parse the JSON body from the request
     const body = await req.json();
-    const { restaurantsData, searchData } = body;
+    // console.log("🚀 ~ POST ~ body:", body)
+    const { restaurantsData, searchData, location } = body;
 
     if (!searchData || typeof searchData !== "string") {
       return NextResponse.json({ error: "Invalid or missing 'search' parameter" }, { status: 400 });
     }
 
     // Call the fetchResponse function with the search input
-    const searchOutput = await fetchResponse(restaurantsData, searchData);
-    console.log("🚀 ~ POST ~ searchOutput:", searchOutput);
+    const searchOutput = await fetchResponse(restaurantsData, searchData, location);
+    // console.log("🚀 ~ POST ~ searchOutput:", searchOutput);
+
+    if (searchOutput.toLocaleLowerCase().includes("not found")) {
+      return NextResponse.json({ error: "Not Found" }, { status: 200 });
+    }
 
     return NextResponse.json({ result: searchOutput }, { status: 200 });
   } catch (error) {
