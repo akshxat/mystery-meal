@@ -26,6 +26,7 @@
     "next": "15.1.6",
     "next-auth": "^4.24.11",
     "next-themes": "^0.3.0",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.10.0",
     "openai": "^4.91.1",
     "prettier": "^3.5.3",
