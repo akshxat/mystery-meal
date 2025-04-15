@@ -150,7 +150,7 @@ export default function MealFinder() {
             );
             const xray = xray1.replace(/\s+/g, "");
             const googleMapsUrl = `https://www.google.com/maps/dir/${location.lat},${location.lng}/${xray}`;
-            //window.open(googleMapsUrl, "_blank");
+            window.open(googleMapsUrl, "_blank");
           }
         }
       }
