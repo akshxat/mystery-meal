@@ -261,7 +261,7 @@ console.log("checkIfexist", checkIfexist);
               </div>
               <div className="hidden items-center justify-end pr-16 sm:flex lg:pr-0">
                 {/* theme toggler */}
-                <button
+                {/* <button
                   aria-label="theme toggler"
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="flex h-8 w-8 items-center justify-center text-body-color duration-300 dark:text-white"
@@ -284,7 +284,7 @@ console.log("checkIfexist", checkIfexist);
                       </g>
                     </svg>
                   </span>
-                </button>
+                </button> */}
 
                 {session?.user ? (
                   <>

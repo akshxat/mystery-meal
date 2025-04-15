@@ -43,7 +43,7 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
-  passwordResetToken    String?   @unique
+  passwordResetToken    String?
   passwordResetTokenExp DateTime?
   isPremium             Boolean?
   isAdmin               Boolean?  @default(false)
@@ -57,6 +57,13 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+}
+
+model Location {
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  city String
+  lat  Float
+  lng  Float
 }
 
 

@@ -35,12 +35,11 @@ export default function MealFinder() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           if (isMounted.current) {
-            console.log("Location:", location);
+            setLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
           }
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
         },
         (error) => {
           // console.error("Error getting location:", error);
