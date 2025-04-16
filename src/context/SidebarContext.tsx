@@ -16,7 +16,7 @@ type SidebarContextType = {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-console.log(SidebarContext)
+//console.log(SidebarContext)
 
 export const useSidebar = () => {
   const context = useContext(SidebarContext);

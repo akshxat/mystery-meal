@@ -11,7 +11,7 @@ import menuData from "./menuData";
 const Header = () => {
   const { data: session } = useSession();
 
-  // console.log("session", session);
+  // //console.log("session", session);
 
   const pathUrl = usePathname();
   // Navbar toggle
@@ -33,7 +33,7 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
     var checkIfexist = menuData.find((item) => item.id == 99);
 
-console.log("checkIfexist", checkIfexist);
+//console.log("checkIfexist", checkIfexist);
     if (session != null && !checkIfexist &&  session?.user?.isAdmin) {
       menuData.push({
         id: 99,
@@ -42,10 +42,10 @@ console.log("checkIfexist", checkIfexist);
         newTab: false,
       });
 
-      console.log("Admin session", session?.user?.isAdmin);
+      //console.log("Admin session", session?.user?.isAdmin);
 
     }
-    console.log("Admin session menudata", menuData);
+    //console.log("Admin session menudata", menuData);
   });
 
   // submenu handler

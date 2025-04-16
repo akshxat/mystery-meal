@@ -34,18 +34,18 @@ export const getNearbyPlaces = async (
     let allResults = response.data.results as any[];
 
     // setTimeout(() => {
-    //   console.log("Fetching all nearby places...");
+    //   //console.log("Fetching all nearby places...");
     //   allResults.push(fetchAllNearbyPlaces(response.data.next_page_token));
     // }, 2000);
 
     const nextPageToken = response.data.next_page_token;
     
     if (nextPageToken) {
-      console.log("Fetching additional pages...");
+      //console.log("Fetching additional pages...");
       // Wait for fetchAllNearbyPlaces to complete and append the results
       const additionalResults = await fetchAllNearbyPlaces(nextPageToken);
       allResults = [...allResults, ...additionalResults];
-      console.log("🚀 ~ allResults:", allResults.length)
+      //console.log("🚀 ~ allResults:", allResults.length)
     }
     
     return allResults;

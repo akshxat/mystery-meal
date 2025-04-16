@@ -10,7 +10,7 @@ const NavMenu = () => {
   // Combine base menu + conditional admin item
   const menuItems = [...menuData];
 
-  console.log('Session: nav', session);
+  //console.log('Session: nav', session);
 
   
 
