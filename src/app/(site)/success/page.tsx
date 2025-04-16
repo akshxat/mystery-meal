@@ -1,10 +1,21 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
+  const router = useRouter();
+
+  setTimeout(() => {
+    router.push("/signin");
+  }, 900);
+
+  setTimeout(() => {
+    signOut();
+  }, 1500);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-green-50">
