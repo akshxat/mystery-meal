@@ -79,10 +79,6 @@ export default function MealFinder() {
       if (!nearbyResponse.ok) throw new Error("Failed to fetch places");
 
       const nearbyResponseData = await nearbyResponse.json();
-      //console.log(
-        "🚀 ~ handleSubmit ~ nearbyResponseData:",
-        nearbyResponseData,
-      );
 
       const transformedRestaurantsData = nearbyResponseData?.map(
         (place: any) => ({
