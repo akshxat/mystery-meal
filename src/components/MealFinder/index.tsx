@@ -144,14 +144,19 @@ export default function MealFinder() {
             ];
 
           if (randomPlace) {
-            const xray1 = randomPlace.plus_code.compound_code.replace(
-              "+",
-              "%2B",
-            );
-            const xray = xray1.replace(/\s+/g, "");
-            const googleMapsUrl = `https://www.google.com/maps/dir/${location.lat},${location.lng}/${xray}`;
+            // const xray1 = randomPlace.plus_code.compound_code.replace(
+            //   "+",
+            //   "%2B",
+            // );
+            // const xray = xray1.replace(/\s+/g, "");
+            // const googleMapsUrl = `https://www.google.com/maps/dir/${location.lat},${location.lng}/${xray}`;
+            // window.open(googleMapsUrl, "_blank");
+            const googleMapsUrl = `https://www.google.com/maps/dir/${location.lat},${location.lng}/${encodeURIComponent(randomPlace.plus_code.compound_code)}`;
             window.open(googleMapsUrl, "_blank");
+          } else {
+            toast.error("No results found for the given search input.");
           }
+          
         }
       }
     } catch (err) {
