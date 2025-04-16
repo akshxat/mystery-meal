@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     // Parse the JSON body from the request
     const body = await req.json();
-    // console.log("🚀 ~ POST ~ body:", body)
+    // //console.log("🚀 ~ POST ~ body:", body)
     const { restaurantsData, searchData, location } = body;
 
     if (!searchData || typeof searchData !== "string") {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     // Call the fetchResponse function with the search input
     const searchOutput = await fetchResponse(restaurantsData, searchData, location);
-    // console.log("🚀 ~ POST ~ searchOutput:", searchOutput);
+    // //console.log("🚀 ~ POST ~ searchOutput:", searchOutput);
 
     if (searchOutput.toLocaleLowerCase().includes("not found")) {
       return NextResponse.json({ error: "Not Found" }, { status: 200 });
