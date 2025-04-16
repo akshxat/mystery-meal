@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
 
 const DashboardPage = () => {
   const { data: session } = useSession();
-  console.log("🚀 ~ DashboardPage ~ session:", session)
+  //console.log("🚀 ~ DashboardPage ~ session:", session)
 
   if (session === undefined || session['user']['isAdmin'] === false) {
     return redirect("/");

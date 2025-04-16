@@ -18,14 +18,14 @@ export const fetchAllNearbyPlaces = async (initialPageToken) => {
       }
 
       const json = await response.json();
-      console.log("🚀 ~ fetchAllNearbyPlaces ~ json:", json)
+      //console.log("🚀 ~ fetchAllNearbyPlaces ~ json:", json)
       results.push(...json.results);
 
       // Check for next_page_token and break the loop if not present
       if (json.next_page_token) {
         pagetoken = json.next_page_token;
         attempts++;
-        console.log(`Fetched page ${attempts}. Waiting for 2 seconds before next request...`);
+        //console.log(`Fetched page ${attempts}. Waiting for 2 seconds before next request...`);
          // Delay for 2 seconds between requests
       } else {
         break;
@@ -37,6 +37,6 @@ export const fetchAllNearbyPlaces = async (initialPageToken) => {
     }
   }
 
-  console.log(`Total places fetched: ${results.length}`);
+  //console.log(`Total places fetched: ${results.length}`);
   return results;
 };

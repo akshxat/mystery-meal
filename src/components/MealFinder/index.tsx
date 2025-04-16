@@ -22,8 +22,8 @@ export default function MealFinder() {
   const sessionId = session?.user?.id;
   const [loading, setLoading] = useState<boolean>(false);
 
-  // console.log("Session ID:", sessionId);
-  // console.log("Premium:", session?.user);
+  // //console.log("Session ID:", sessionId);
+  // //console.log("Premium:", session?.user);
 
   const isPremiumUser = () => {
     return session?.user?.isPremium ? true : false;
@@ -63,7 +63,7 @@ export default function MealFinder() {
       distance: distanceValue,
       price: priceValue,
     };
-    console.log("Form Data:", formData);
+    //console.log("Form Data:", formData);
 
     try {
       const nearbyResponse = await fetch(
@@ -79,7 +79,7 @@ export default function MealFinder() {
       if (!nearbyResponse.ok) throw new Error("Failed to fetch places");
 
       const nearbyResponseData = await nearbyResponse.json();
-      console.log(
+      //console.log(
         "🚀 ~ handleSubmit ~ nearbyResponseData:",
         nearbyResponseData,
       );
@@ -91,7 +91,7 @@ export default function MealFinder() {
         }),
       );
 
-      // console.log("Transformed Restaurants Data:", transformedRestaurantsData);
+      // //console.log("Transformed Restaurants Data:", transformedRestaurantsData);
       const isPremium =
         session?.user != null ? session?.user?.isPremium : false;
 
@@ -125,7 +125,7 @@ export default function MealFinder() {
         const aiRecommendedPlace = nearbyResponseData.find(
           (x: any) => x["place_id"] === webData["result"],
         );
-        // console.log("🚀 ~ handleSubmit ~ aiRecommendedPlace:", aiRecommendedPlace)
+        // //console.log("🚀 ~ handleSubmit ~ aiRecommendedPlace:", aiRecommendedPlace)
 
         if (aiRecommendedPlace) {
           const googleMapsUrl = `https://www.google.com/maps/dir/${location.lat},${location.lng}/${encodeURIComponent(aiRecommendedPlace.plus_code.compound_code)}`;
@@ -134,7 +134,7 @@ export default function MealFinder() {
           toast.error("No results found for the given search input.");
         }
 
-        // console.log("webData:", webData);
+        // //console.log("webData:", webData);
       } else {
         // Non-premium user logic
         if (isMounted.current) {
